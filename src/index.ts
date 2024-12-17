@@ -5,10 +5,10 @@ import axios, { AxiosError } from 'axios';
 
 export class Cryptomus {
     constructor(
-        private readonly merchant: string, 
+        private readonly merchant: string,
         private readonly paymentToken: string,
         private readonly payoutToken: string,
-    ) {}
+    ) { }
 
     /**
      * Sends a request to the specified route using the given HTTP method and token type.
@@ -19,7 +19,7 @@ export class Cryptomus {
      * @param {Record<string, any>} data - The data to include in the request.
      * @return {Promise<T>} - A promise that resolves with the response data.
      */
-    async request<T>( method: E_HTTP, type: E_TOKEN, route: string, data: Record<string, any> ): Promise<T> {
+    async request<T>(method: E_HTTP, type: E_TOKEN, route: string, data: Record<string, any>): Promise<T> {
         try {
             let response = await axios.request({
                 method,
@@ -29,13 +29,13 @@ export class Cryptomus {
                 headers: {
                     "Content-Type": "application/json",
                     "Merchant": this.merchant,
-                    "Sign": this.makeSignatue( data, type === E_TOKEN.PAYMENT ? this.paymentToken : this.payoutToken ),
+                    "Sign": this.makeSignatue(data, type === E_TOKEN.PAYMENT ? this.paymentToken : this.payoutToken),
                 }
             })
-    
+
             return <T>response.data;
-        } catch ( error ) {
-            throw new CryptomusError( JSON.stringify(error.response.data, undefined, 4) );
+        } catch (error) {
+            throw new CryptomusError(JSON.stringify(error.response.data, undefined, 4));
         }
     }
 
@@ -45,8 +45,8 @@ export class Cryptomus {
      * @param {I_CREATE_PAYMENT_REQUEST} options - The payment options.
      * @return {Promise<I_CREATE_PAYMENT_RESPONSE>} The response of creating a payment.
      */
-    async createPayment( options: I_CREATE_PAYMENT_REQUEST ): Promise<I_CREATE_PAYMENT_RESPONSE> {
-        return await this.request<I_CREATE_PAYMENT_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/payment", options );
+    async createPayment(options: I_CREATE_PAYMENT_REQUEST): Promise<I_CREATE_PAYMENT_RESPONSE> {
+        return await this.request<I_CREATE_PAYMENT_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/payment", options);
     }
 
     /**
@@ -55,8 +55,8 @@ export class Cryptomus {
      * @param {I_CREATE_STATIC_WALLET_REQUEST} options - The options for creating the static wallet.
      * @return {Promise<I_CREATE_STATIC_WALLET_RESPONSE>} A promise that resolves with the response of creating the static wallet.
      */
-    async createStaticWallet( options: I_CREATE_STATIC_WALLET_REQUEST ): Promise<I_CREATE_STATIC_WALLET_RESPONSE> {
-        return await this.request<I_CREATE_STATIC_WALLET_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/wallet", options );
+    async createStaticWallet(options: I_CREATE_STATIC_WALLET_REQUEST): Promise<I_CREATE_STATIC_WALLET_RESPONSE> {
+        return await this.request<I_CREATE_STATIC_WALLET_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/wallet", options);
     }
 
     /**
@@ -65,8 +65,8 @@ export class Cryptomus {
      * @param {I_GEN_QR_REQUEST} options - The options for generating the QR code.
      * @return {Promise<I_GEN_QR_RESPONSE>} - A promise that resolves to the generated QR code response.
      */
-    async genQr( options: I_GEN_QR_REQUEST ): Promise<I_GEN_QR_RESPONSE> {
-        return await this.request<I_GEN_QR_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/wallet/qr", options );
+    async genQr(options: I_GEN_QR_REQUEST): Promise<I_GEN_QR_RESPONSE> {
+        return await this.request<I_GEN_QR_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/wallet/qr", options);
     }
 
     /**
@@ -75,8 +75,8 @@ export class Cryptomus {
      * @param {I_BLOCK_STATIC_WALLER_REQUEST} options - The options for blocking the wallet.
      * @return {Promise<I_BLOCK_STATIC_WALLER_RESPONSE>} - A promise that resolves to the response of the blocking operation.
      */
-    async blockStaticWallet( options: I_BLOCK_STATIC_WALLET_REQUEST ): Promise<I_BLOCK_STATIC_WALLET_RESPONSE> {
-        return await this.request<I_BLOCK_STATIC_WALLET_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/wallet/block-address", options );
+    async blockStaticWallet(options: I_BLOCK_STATIC_WALLET_REQUEST): Promise<I_BLOCK_STATIC_WALLET_RESPONSE> {
+        return await this.request<I_BLOCK_STATIC_WALLET_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/wallet/block-address", options);
     }
 
     /**
@@ -85,8 +85,8 @@ export class Cryptomus {
      * @param {I_REFUND_FROM_BLOCK_WALLET_REQUEST} options - The options for the refund request.
      * @return {Promise<I_REFUND_FROM_BLOCK_WALLET_RESPONSE>} - A promise that resolves to the refund response.
      */
-    async refundFromBlockedWallet( options: I_REFUND_FROM_BLOCK_WALLET_REQUEST ): Promise<I_REFUND_FROM_BLOCK_WALLET_RESPONSE> {
-        return await this.request<I_REFUND_FROM_BLOCK_WALLET_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/wallet/blocked-address-refund", options );
+    async refundFromBlockedWallet(options: I_REFUND_FROM_BLOCK_WALLET_REQUEST): Promise<I_REFUND_FROM_BLOCK_WALLET_RESPONSE> {
+        return await this.request<I_REFUND_FROM_BLOCK_WALLET_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/wallet/blocked-address-refund", options);
     }
 
     /**
@@ -95,8 +95,8 @@ export class Cryptomus {
      * @param {I_PAYMENT_INFO_REQUEST} options - The payment information request options.
      * @return {Promise<I_PAYMENT_INFO_RESPONSE>} The payment information response.
      */
-    async getPayment( options: I_PAYMENT_INFO_REQUEST ): Promise<I_PAYMENT_INFO_RESPONSE> {
-        return await this.request<I_PAYMENT_INFO_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/payment/info", options );
+    async getPayment(options: I_PAYMENT_INFO_REQUEST): Promise<I_PAYMENT_INFO_RESPONSE> {
+        return await this.request<I_PAYMENT_INFO_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/payment/info", options);
     }
 
     /**
@@ -105,8 +105,8 @@ export class Cryptomus {
      * @param {I_PAYMENT_REFUND_REQUEST} options - The options for refunding the payment.
      * @return {Promise<I_PAYMENT_REFUND_RESPONSE>} The response containing the refund details.
      */
-    async refundPayment( options: I_PAYMENT_REFUND_REQUEST ): Promise<I_PAYMENT_REFUND_RESPONSE> {
-        return await this.request<I_PAYMENT_REFUND_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/payment/refund", options );
+    async refundPayment(options: I_PAYMENT_REFUND_REQUEST): Promise<I_PAYMENT_REFUND_RESPONSE> {
+        return await this.request<I_PAYMENT_REFUND_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/payment/refund", options);
     }
 
     /**
@@ -115,8 +115,8 @@ export class Cryptomus {
      * @param {I_RESEND_WEBHOOK_REQUEST} options - The options for resending the webhook.
      * @return {Promise<I_RESEND_WEBHOOK_RESPONSE>} - The response from the resend request.
      */
-    async resendWebhook( options: I_RESEND_WEBHOOK_REQUEST ): Promise<I_RESEND_WEBHOOK_RESPONSE> {
-        return await this.request<I_RESEND_WEBHOOK_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/payment/resend", options );
+    async resendWebhook(options: I_RESEND_WEBHOOK_REQUEST): Promise<I_RESEND_WEBHOOK_RESPONSE> {
+        return await this.request<I_RESEND_WEBHOOK_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/payment/resend", options);
     }
 
     /**
@@ -125,8 +125,8 @@ export class Cryptomus {
      * @param {I_TEST_WEBHOOK_REQUEST} options - The options for the test webhook request.
      * @return {Promise<I_TEST_WEBHOOK_RESPONSE>} - A promise that resolves to the response of the test webhook request.
      */
-    async testPaymentWebhook( options: I_TEST_WEBHOOK_REQUEST ): Promise<I_TEST_WEBHOOK_RESPONSE> {
-        return await this.request<I_TEST_WEBHOOK_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/test-webhook/payment", options );
+    async testPaymentWebhook(options: I_TEST_WEBHOOK_REQUEST): Promise<I_TEST_WEBHOOK_RESPONSE> {
+        return await this.request<I_TEST_WEBHOOK_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/test-webhook/payment", options);
     }
 
     /**
@@ -135,8 +135,8 @@ export class Cryptomus {
      * @param {I_TEST_WEBHOOK_REQUEST} options - The options for the test webhook request.
      * @return {Promise<I_TEST_WEBHOOK_RESPONSE>} - The response from the test webhook request.
      */
-    async testPayoutWebhook( options: I_TEST_WEBHOOK_REQUEST ): Promise<I_TEST_WEBHOOK_RESPONSE> {
-        return await this.request<I_TEST_WEBHOOK_RESPONSE>( E_HTTP.POST, E_TOKEN.PAYMENT, "v1/test-webhook/payout", options );
+    async testPayoutWebhook(options: I_TEST_WEBHOOK_REQUEST): Promise<I_TEST_WEBHOOK_RESPONSE> {
+        return await this.request<I_TEST_WEBHOOK_RESPONSE>(E_HTTP.POST, E_TOKEN.PAYMENT, "v1/test-webhook/payout", options);
     }
 
     /**
@@ -146,14 +146,14 @@ export class Cryptomus {
      * @param {string} key - The key used in the signature generation.
      * @return {string} The generated signature.
      */
-    makeSignatue( data: Record<string, any>, key: string ): string {
-        const signatue = createHash( 'md5' )
+    makeSignatue(data: Record<string, any>, key: string): string {
+        const signatue = createHash('md5')
             .update(
                 Buffer.from(
-                    JSON.stringify( data ).replace( /\//g, '\\/' ),
-                ).toString( 'base64' ) + key,
+                    JSON.stringify(data),
+                ).toString('base64') + key,
             )
-            .digest( 'hex' );
+            .digest('hex');
 
         return signatue;
     }
@@ -164,10 +164,10 @@ export class Cryptomus {
      * @param {Record<string, any>} data - The data to verify the signature for.
      * @return {boolean} Returns true if the signature is valid, false otherwise.
      */
-    verifySignatue( data: Record<string, any> ): boolean {
-        let remote = data[ 'sign' ];
-        delete data[ 'sign' ];
+    verifySignatue(data: Record<string, any>): boolean {
+        let remote = data['sign'];
+        delete data['sign'];
 
-        return remote === this.makeSignatue( data, this.paymentToken );
+        return remote === this.makeSignatue(data, this.paymentToken);
     }
 }
